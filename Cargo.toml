@@ -1,0 +1,6 @@
+[package]
+name = "usrsctp-sys"
+version = "0.1.0"
+authors = ["Tae-il Lim <trlim@iotok.kr>"]
+
+[dependencies]
