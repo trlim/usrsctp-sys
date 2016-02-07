@@ -2,7 +2,7 @@
 
 extern crate libc;
 
-use libc::{c_int, c_uint, c_void, size_t, ssize_t, uint16_t, uint32_t};
+use libc::{c_char, c_int, c_uint, c_void, size_t, ssize_t, uint8_t, uint16_t, uint32_t};
 use libc::{socklen_t};
 use libc::{sockaddr};
 
@@ -46,7 +46,17 @@ pub type usrsctp_receive_cb = extern "C" fn(
 pub type usrsctp_send_cb = extern "C" fn(sock: *mut socket, sb_free: uint32_t) -> c_int;
 
 extern "C" {
-    pub fn usrsctp_init(udp_port: uint16_t);
+    pub fn usrsctp_init(
+        udp_port: uint16_t,
+        conn_output:
+            Option<extern "C" fn(
+                addr: *mut c_void,
+                buffer: *mut c_void,
+                length: size_t,
+                tos: uint8_t,
+                set_df: uint8_t) -> c_int>,
+        debug_printf: Option<extern "C" fn(format: *const c_char, ...)>
+    );
     pub fn usrsctp_finish() -> c_int;
 
     pub fn usrsctp_socket(
@@ -100,6 +110,13 @@ extern "C" {
         optlen: socklen_t) -> c_int;
 }
 
-#[test]
-fn it_works() {
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn init() {
+        unsafe { usrsctp_init(4802, None, None) };
+        assert_eq!(unsafe { usrsctp_finish() }, 0);
+    }
 }
