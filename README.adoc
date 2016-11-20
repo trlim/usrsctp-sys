@@ -1,0 +1,15 @@
+== Building
+
+=== Windows
+
+Build usrsctp.
+
+----
+> git clone https://github.com/sctplab/usrsctp.git
+> cd usrsctp
+> md build && cd build
+
+; For MinGW target
+> cmake -G "MinGW Makefiles" ..
+> mingw32-make
+----
